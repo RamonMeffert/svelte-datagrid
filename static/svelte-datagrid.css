@@ -73,15 +73,20 @@ button.sdg-table-head.asc::after {
   border-radius: .2rem;
 }
 
-.sdg-datagrid.loading {
+.sdg-datagrid.loading * {
+  color: var(--muted-color);
+}
+
+.sdg-datagrid.loading tbody {
   position: relative;
 }
 
-.sdg-datagrid.loading::after {
+.sdg-datagrid.loading tbody::after {
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(154, 154, 154, 0.1);
+  background-color: rgba(63, 63, 63, 0.3);
 }
