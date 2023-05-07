@@ -1,9 +1,13 @@
 import type { DataGridPage, DataGridPageInfo } from "$lib/types/DataGridPage.js";
+import type { SortDirection } from "$lib/types/DataGridSortInfo.js";
+import type { DataGridSource } from "$lib/types/DataGridSource.js";
 
 export const getPage = async <TRow>(
-    source: ((page: number, items: number) => Promise<DataGridPage<TRow> | null>) | TRow[],
+    source: DataGridSource<TRow>,
     page: number,
     items: number,
+    sort?: keyof TRow,
+    order: SortDirection = 'asc'
 ) => {
     if (Array.isArray(source)) {
         return {
@@ -17,7 +21,7 @@ export const getPage = async <TRow>(
             }
         }
     } else {
-        return await source(page, items);
+        return await source(page, items, sort, order);
     }
 }
 

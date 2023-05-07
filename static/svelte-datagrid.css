@@ -1,3 +1,29 @@
+button.sdg-table-head {
+  appearance: none;
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+  text-align: inherit;
+  color: inherit;
+  font-size: inherit;
+  position: relative;
+  box-sizing: border-box;
+  padding-right: 1rem; /* space for sorting indicator */
+}
+
+button.sdg-table-head.desc::after {
+  content: "↓";
+  position: absolute;
+  right: 0;
+}
+
+button.sdg-table-head.asc::after {
+  content: "↑";
+  position: absolute;
+  right: 0;
+}
+
 .sdg-paginator {
   display: flex;
   gap: .2rem;
@@ -38,4 +64,24 @@
   width: .7rem;
   height: 1rem;
   display: inline-block;
+}
+
+.sdg-item-placeholder {
+  height: 1.7ex;
+  width: 100%;
+  background-color: rgba(154, 154, 154, 0.3);
+  border-radius: .2rem;
+}
+
+.sdg-datagrid.loading {
+  position: relative;
+}
+
+.sdg-datagrid.loading::after {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(154, 154, 154, 0.1);
 }

@@ -1,10 +1,10 @@
 import type { DataGridColumn } from '$lib/types/DataGridColumn.js';
 
-export const getStyle = <TRow>(columns: Array<DataGridColumn<TRow>>) => {
+export const getStyle = <TRow>(columns: { [id: symbol]: DataGridColumn<TRow>}) => {
 	const columnStyles: string[] = [];
 
-	for (const [index, column] of columns.entries()) {
-		columnStyles.push(getColumnStyle(index + 1, column));
+	for (const [index, key] of Object.getOwnPropertySymbols(columns).entries()) {
+		columnStyles.push(getColumnStyle(index + 1, columns[key]));
 	}
 
 	return columnStyles.join('');
