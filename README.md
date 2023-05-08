@@ -1,40 +1,33 @@
 # Svelte Datagrid
 
-An experimental datagrid library aiming to improve developer experience over
-existing libraries while maintaining great performance and good customisability.
+> **Warning**  
+> This library is a work-in-progress. It is not available on NPM.
+
+An experimental type-safe datagrid library aiming to improve developer
+experience over existing libraries while maintaining great performance and
+customisability.
+
+## Getting started
+
+> **Note**  
+> Full documentation is available on _documentation site in progress_
+
+A basic table looks like this:
+
+```svelte
+<DataGrid type={Book} source={books} let:data>
+  <Column {data} header="Title"  value={b => b.title} />
+  <Column {data} header="Author" value={b => b.author} />
+  <Column {data} header="Price"  value={b => b.price} />
+  <ListPaginator slot=paginator />
+</DataGrid>
+```
 
 ## Developing
 
-This library recommends Bun.
-
-```bash
+```sh
+git clone https://github.com/RamonMeffert/svelte-datagrid.git
+cd svelte-datagrid
+bun install
 bun run dev
-```
-
-Everything inside `src/lib` is part of your library, everything inside `src/routes` can be used as a showcase or preview app.
-
-## Building
-
-To build your library:
-
-```bash
-bun run package
-```
-
-To create a production version of your showcase app:
-
-```bash
-bun run build
-```
-
-You can preview the production build with `bun preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
-
-## Publishing
-
-To publish your library to [npm](https://www.npmjs.com):
-
-```bash
-npm publish
 ```
