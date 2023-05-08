@@ -1,0 +1,6 @@
+const books = [
+  { title: 'The Noise of Time', author: 'Julian Barnes', price: '19.99' },
+  { title: 'Kafka on the Shore', author: 'Haruki Murakami', price: '21.99' },
+  { title: 'On Connection', author: 'Kae Tempest', price: '24.99' },
+  // and more, probably
+]

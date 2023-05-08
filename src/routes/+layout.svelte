@@ -2,7 +2,7 @@
   import '@picocss/pico/css/pico.min.css';
   import 'svelte-highlight/styles/github-dark.css';
 
-  let version = __version__;
+  const version = __version__;
 </script>
 
 <nav class=container-fluid>

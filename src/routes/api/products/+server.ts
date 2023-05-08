@@ -17,12 +17,13 @@ export const GET: RequestHandler = async ({ fetch, url }) => {
 
     if (response.ok) {
         const data: Product[] = await response.json();
-        const processedData = filter(data, skip, limit, searchQuery, sort as keyof Product, order as 'desc' | 'asc')
+        const { data: processedData, filteredRows } = filter(data, skip, limit, searchQuery, sort as keyof Product, order as 'desc' | 'asc')
         
         const fullResponse = {
             skip: skip,
             limit: limit,
             total: data.length,
+            filtered: filteredRows,
             products: processedData,
         }
         
@@ -37,8 +38,15 @@ const filter = (data: Product[], skip = 0, limit = 10, search: string | null, so
     const ex = data[0];
     
     if (search) {
-        data = data.filter(d => d.product_name)
+        data = data.filter(d => {
+            const nameMatch = d.product_name.toLowerCase().search(search.toLowerCase()) >= 0;
+            const manuMatch = d.manufacturer.toLowerCase().search(search.toLowerCase()) >= 0;
+
+            return nameMatch || manuMatch;
+        })
     }
+
+    const filteredRows = data.length;
 
     if (sort && Object.keys(ex).some(key => key === sort)) {
         if (order) {
@@ -53,7 +61,7 @@ const filter = (data: Product[], skip = 0, limit = 10, search: string | null, so
         }
     }
     
-    return data.slice(skip, skip + limit);
+    return { data: data.slice(skip, skip + limit), filteredRows };
 }
 
 const compareString = (a: string, b: string, desc = false) => {

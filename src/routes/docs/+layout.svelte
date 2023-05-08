@@ -20,9 +20,9 @@
       name: 'Basics',
       url: 'basics',
       pages: [
-        { name: 'The DataGrid component', url: 'datagrid' },
-        { name: 'The Column component', url: 'column' },
+        { name: 'Setup', url: 'setup' },
         { name: 'Pagination', url: 'pagination' },
+        { name: 'Search', url: 'search' },
       ]
     },
     {
@@ -50,35 +50,44 @@
       {#each menuItems as item}
         {@const currentItem = $page.url.pathname.split('/')[2]}
         {@const currentPage = $page.url.pathname.split('/')[3]}
-        <li>{item.name}</li>
-        <li>
-          <ul>
-            {#each item.pages as page}
-            {@const isCurrent = currentPage === page.url}
-              <li>
-                <a
-                  class:current={isCurrent}
-                  href="/docs/{item.url}/{page.url}">
-                  {page.name}
-                </a>
-              </li>
-            {/each}
-          </ul>
-        </li>
+        <li class=title>{item.name}</li>
+        {#if item.pages}
+          <li>
+            <ul>
+              {#each item.pages as page}
+              {@const isCurrent = currentPage === page.url}
+                <li>
+                  <a
+                    class:current={isCurrent}
+                    href="/docs/{item.url}/{page.url}">
+                    {page.name}
+                  </a>
+                </li>
+              {/each}
+            </ul>
+          </li>
+        {/if}
       {/each}
       </ul>
     </nav>
   </aside>
-  <div>
+  <main>
     <slot />
-  </div>
+  </main>
 </div>
 
 <style scoped>
+  .grid {
+    border-top: var(--border-width) solid var(--accordion-border-color);
+    grid-template-columns: 200px 1fr;
+  }
+
   aside {
-    border-right: var(--border-width) solid var(--accordion-border-color);
     padding-top: var(--spacing);
     overflow-y: scroll;
+    align-self: start;
+    position: sticky;
+    top: 0;
   }
 
   aside a.current {
@@ -89,8 +98,20 @@
     content: ' •';
   }
 
-  .grid {
-    border-top: var(--border-width) solid var(--accordion-border-color);
-    grid-template-columns: 250px 1fr;
+  aside li ul {
+    margin-top: 0;
+  }
+
+  aside li.title {
+    text-transform: lowercase;
+    font-variant: small-caps;
+    padding-block-end: 0;
+  }
+
+  main {
+    border-left: var(--border-width) solid var(--accordion-border-color);
+    padding: var(--block-spacing-vertical) 0;
+    padding-left: var(--spacing);
+    max-width: 80ex;
   }
 </style>

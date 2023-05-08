@@ -1,24 +1,27 @@
-<script lang="ts">
-  import type { DataGridPageInfo } from './types/DataGridPage.js';
+<script lang=ts>
+  import type { DataGridResult } from './types/DataGridPage.js';
 
   import { getContext } from 'svelte';
   import { key, type DataGridContext } from './DataGridContext.js';
 
   type TRow = $$Generic;
 
+  /** The number of page links to show  */
   export let window = 3;
 
-  const { pageInfo } = getContext<DataGridContext<TRow>>(key);
+  const { query, resultInfo } = getContext<DataGridContext<TRow>>(key);
 
-  $: _window = getWindow($pageInfo);
+  let _window: { pages: number[]; firstEllipsis: boolean; lastEllipsis: boolean };
+  
+  $: _window = getWindow($resultInfo);
 
-  function getWindow(pageInfo: DataGridPageInfo | null) {
-    if (pageInfo) {
+  function getWindow(result: DataGridResult | undefined) {
+    if (result) {
       const center = Math.ceil(window / 2);
       const offset = window - center;
       const minCenter = center + offset + 1;
-      const maxCenter = (pageInfo.total.pages ?? 0) - center - offset;
-      const page = pageInfo.page;
+      const maxCenter = (result.pages ?? 0) - center - offset;
+      const page = $query.page;
       const displayPage = Math.min(maxCenter, Math.max(minCenter, page));
 
       const pages = [...Array(window).keys()].map((i) => {
@@ -29,14 +32,14 @@
         pages.unshift(2);
       }
 
-      if (pages.at(-1) === pageInfo.total.pages - 2) {
-        pages.push(pageInfo.total.pages - 1)
+      if (pages.at(-1) === result.pages - 2) {
+        pages.push(result.pages - 1)
       }
 
       return {
         pages: pages,
         firstEllipsis: pages[0] >= 3,
-        lastEllipsis: pages.at(-1)! <= pageInfo.total.pages - 2
+        lastEllipsis: pages.at(-1)! <= result.pages - 2
       };
     }
     return {
@@ -47,9 +50,7 @@
   }
 
   function setPage(page: number) {
-    if ($pageInfo) {
-      $pageInfo.page = page;
-    }
+      $query.page = page;
   }
 </script>
 
@@ -60,9 +61,9 @@
 -->
 
 <div class="sdg-paginator">
-  {#if $pageInfo}
-    {@const total = $pageInfo.total.pages}
-    {@const current = $pageInfo.page}
+  {#if $resultInfo}
+    {@const total = $resultInfo.pages}
+    {@const current = $query.page}
     <button class="sdg-paginator-nav-button" disabled={current <= 1} on:click={() => setPage(current - 1)}>Previous</button>
     {#if total > 5}
       <button class:current={current === 1} on:click={() => setPage(1)} class="sdg-paginator-button"
@@ -90,14 +91,14 @@
         >
       {/each}
     {/if}
-    <button  class="sdg-paginator-nav-button" on:click={() => setPage(current + 1)} disabled={current >= total}>Next</button>
+    <button class="sdg-paginator-nav-button" on:click={() => setPage(current + 1)} disabled={current >= total}>Next</button>
   {:else}
-    <button disabled>Previous</button>
+    <button class="sdg-paginator-nav-button" disabled>Previous</button>
     {#each [...Array(window + 4).keys()] as page}
       <div class="sdg-placeholder sdg-paginator-button">
         <span class="sdg-fake-number"></span>
       </div>
     {/each}
-    <button disabled>Next</button>
+    <button class="sdg-paginator-nav-button" disabled>Next</button>
   {/if}
 </div>

@@ -1,0 +1,18 @@
+<DataGrid source={getData} type={Product} let:data items={5}>
+  <DataGridSearch slot=search />
+  <Column {data} header="Product" value={(d) => d.product_name} />
+  <Column {data} header="Manufacturer" value={(d) => d.manufacturer} />
+  <Column {data}
+    header="Released"
+    value={(d) => d.release_date}
+    render={(d) => new Date(d.release_date).toLocaleDateString()}
+  />
+  <Column {data}
+    header="Price"
+    value={(d) => d.price}
+    render={(d) => \`€ \${d.price.toFixed(2)}\`}
+    align="right"
+  />
+  <ResultInfo slot=resultInfo />
+  <ListPaginator slot=paginator />
+</DataGrid>

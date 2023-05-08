@@ -1,50 +1,57 @@
 <script lang="ts">
+  import { browser } from '$app/environment';
+
   import type { DataGridSource } from './types/DataGridSource.js';
-
-  import type { DataGridSortInfo, SortDirection } from './types/DataGridSortInfo.js';
-
-  import { debounce } from './util/debounce.js';
-
-  import { getStyle } from './util/style.js';
-  import { getPage, getPageInfoFromPage } from './util/page.js';
-  import { key, type DataGridContext } from './DataGridContext.js';
-  import { onMount, setContext } from 'svelte';
-  import { writable } from 'svelte/store';
-  import type { DataGridPage, DataGridPageInfo } from './types/DataGridPage.js';
+  import type { DataGridPage, DataGridQuery, DataGridResult } from './types/DataGridPage.js';
   import type { DataGridColumn } from './types/DataGridColumn.js';
+  import { getStyle } from './util/style.js';
+  import { getPage } from './util/page.js';
+  import { key, type DataGridContext } from './DataGridContext.js';
+  import { onDestroy, onMount, setContext } from 'svelte';
+  import { writable } from 'svelte/store';
 
   // Type representing a row of data
   type TRow = $$Generic;
 
-  // Data source. Can be a set or a promise.
+  /* ===== Component parameters ============================================= */
+
+  /** Expects a constructor for a class representing one row of data. */
   export let type: new () => TRow;
 
+  /** The data source. Can be an array or a promise resolving to a DataGridPage object. */
   export let source: DataGridSource<TRow>;
+
+  /** The number of items to show on a page. Defaults to 10. */
   export let items: number = 10;
+
+  /* ===== Stores and Context API =========================================== */
 
   // Because columns are defined outside of the data grid, we need a store.
   // Columns get this store using the Context API and write their column info
   // to it.
-  const columns = writable<{ [id: symbol]: DataGridColumn<TRow> }>({});
+  const columns = writable<{ [id: symbol]: DataGridColumn<TRow> } | undefined>(undefined);
 
   // Since the paginator is a separate component, we need to be able to tell
-  // it how many pages there are, how many pages there are, etc.
-  const pageInfo = writable<DataGridPageInfo | null>(null);
+  // it how many pages there are, how many pages there are, etc. We use a store
+  // for that.
+  const query = writable<DataGridQuery>({
+    page: 1,
+    items: items
+  });
 
-  const sortInfo = writable<DataGridSortInfo>({ column: undefined, direction: 'asc' });
+  const resultInfo = writable<DataGridResult | undefined>();
 
-  // We know info about the columns
-  $: columnsInitialized = Object.getOwnPropertySymbols($columns).length > 0;
-
-  let loading = false;
-
-  // Define context for the context API.
+  // Define context for the context Api.sort.
   setContext<DataGridContext<TRow>>(key, {
     type,
     columns,
-    pageInfo,
-    sortInfo
+    query,
+    resultInfo
   });
+
+  /* ===== Internal variables =============================================== */
+
+  let loading = false;
 
   // Result from data source. Contains info about pagination
   let page: DataGridPage<TRow> | null = null;
@@ -55,102 +62,145 @@
   // Styles for the table.
   let style: string = '';
 
+  /* ===== Reactive variables =============================================== */
+
   // Data should be reactive
   $: data = page?.data || [];
 
-  // When the page change is requested, go to a different page.
-  $: $pageInfo && goToPage();
+  $: style = $columns ? getStyle($columns) : '';
 
-  async function goToPage() {
-    if ($pageInfo) {
+  // When the page changes, update the data
+  const unsubscribePageInfo = query.subscribe(update);
+
+  /* ===== Functions ======================================================== */
+
+  async function update() {
+    if (browser) {
       loading = true;
-      if ($sortInfo.column) {
-        page = await getPage(
-          source,
-          $pageInfo.page,
-          $pageInfo.items,
-          $columns[$sortInfo.column].key,
-          $sortInfo.direction
-        );
-      } else {
-        page = await getPage(source, $pageInfo.page, $pageInfo.items);
-      }
+
+      const sortKey =
+        $columns && $query.sort ? $columns?.[$query.sort?.column].key : undefined;
+
+      page = await getPage(
+        source,
+        $query.page ?? 1,
+        $query.items ?? items,
+        $query.search,
+        $query.sort?.column,
+        sortKey,
+        $query.sort?.direction
+      );
+
+      resultInfo.update(ri => {
+        if (page?.total) {
+          ri = page.total;
+        }
+
+        return ri;
+      });
+
       loading = false;
     }
   }
 
-  sortInfo.subscribe(async (i) => {
-    if ($pageInfo && $columns) {
-      loading = true;
-      if (i.column) {
-        page = await getPage(source, $pageInfo.page, $pageInfo.items, $columns[i.column].key, i.direction);
-      } else {
-        page = await getPage(source, $pageInfo.page, $pageInfo.items);
-      }
-      loading = false;
-    }
-  })
-
+  /**
+   * Read query parameters to set pagination and search
+   * 
+   * @param url
+   */
   function getPaginationInfoFromUrl(url: string) {
     const params = new URL(url).searchParams;
+
     const pageParam = params.get('page');
     const page = pageParam ? parseInt(pageParam) : undefined;
+
     const itemsParam = params.get('items');
     const items = itemsParam ? parseInt(itemsParam) : undefined;
-    return { page, items };
+
+    const searchParam = params.get('search');
+    const search = searchParam ?? undefined;
+
+    return { page, items, search };
   }
+
+  const setSort = (columnKey: symbol) => {
+    query.update((pi) => {
+      if (pi) {
+        // If a column is already sorted,
+        if (pi?.sort?.column === columnKey) {
+          // and if the current direction is ascending,
+          if (pi.sort.direction === 'asc') {
+            // change the direction to descending;
+            pi.sort.direction = 'desc';
+          } else {
+            // otherwise, if the direction is already descending, remove the sort.
+            pi.sort = undefined;
+          }
+          // If no column is being sorted,
+        } else {
+          // Set the clicked column as sorted.
+          pi.sort = {
+            column: columnKey,
+            direction: 'asc'
+          };
+        }
+      }
+
+      return pi;
+    });
+  };
+
+  /* ===== Component lifetime functions====================================== */
 
   // On pageload, request first data.
   onMount(async () => {
-    style = getStyle($columns);
-    const { page: currentPage, items: urlItems } = getPaginationInfoFromUrl(document.location.href);
-    page = await getPage(source, currentPage ?? 1, urlItems ?? items, undefined);
-    if (page) {
-      $pageInfo = getPageInfoFromPage(page);
-    }
+    const {
+      page: urlPage,
+      items: urlItems,
+      search
+    } = getPaginationInfoFromUrl(document.location.href);
+
+    // Update all fields of pageInfo store at once to reduce number of calls
+    // to update()
+    query.update((pi) => {
+      pi.items = urlItems ?? items;
+      pi.page = urlPage ?? 1;
+      if (search) {
+        pi.search = search;
+      }
+
+      return pi;
+    });
   });
 
-  const setSort = (columnKey: symbol) => {
-    sortInfo.update((s) => {
-      // If a column is already sorted,
-      if (s.column === columnKey) {
-        // and if the current direction is ascending,
-        if (s.direction === 'asc') {
-          // change the direction to descending;
-          s.direction = 'desc';
-        } else {
-          // otherwise, if the direction is already descending, remove the sort.
-          s.column = undefined;
-        }
-        // If no column is being sorted,
-      } else {
-        // Set the clicked column as sorted.
-        s.column = columnKey;
-        // and sort it ascending.
-        s.direction = 'asc';
-      }
-      return s;
-    });
-  };
+  onDestroy(() => {
+    unsubscribePageInfo();
+  });
 </script>
 
 <svelte:head>
   {@html `<style>${style}</style>`}
 </svelte:head>
 
-<table class=sdg-datagrid class:loading>
+<slot name="search" />
+
+<table class="sdg-datagrid" class:loading>
   <thead>
     <tr>
-      {#if !columnsInitialized}
+      {#if !$columns}
+        <!--
+          We don't have information on the columns, so render a one-column
+          placeholder header.
+        -->
         <tr><th><div class="sdg-item-placeholder" /></th></tr>
-      {:else if columnsInitialized && data.length === 0}
-        {#each Object.getOwnPropertySymbols($columns) as _columnKey}
-          <th><div class="sdg-item-placeholder" /></th>
-        {/each}
       {:else}
+        <!--
+          We know everything we need to know about the columns, so render the
+          column headers.
+        -->
         {#each Object.getOwnPropertySymbols($columns) as columnKey}
           {@const column = $columns[columnKey]}
-          {@const sort = $sortInfo.column === columnKey ? $sortInfo.direction : ''}
+          {@const sort = $query.sort?.column === columnKey ? $query.sort.direction : ''}
           <th>
             <button on:click={() => setSort(columnKey)} class="sdg-table-head {sort}">
               {column.header}
@@ -161,19 +211,8 @@
     </tr>
   </thead>
   <tbody>
-    {#if data.length === 0}
-      {#each [...Array(items).keys()] as _row}
-        <tr>
-          {#if columnsInitialized}
-            {#each Object.getOwnPropertySymbols($columns) as _columnKey}
-              <td><div class="sdg-item-placeholder" /></td>
-            {/each}
-          {:else}
-            <td><div class="sdg-item-placeholder" /></td>
-          {/if}
-        </tr>
-      {/each}
-    {:else}
+    {#if data.length !== 0 && $columns}
+      <!-- We have everything we need, render normally -->
       {#each data as row}
         <tr>
           {#each Object.getOwnPropertySymbols($columns) as columnKey}
@@ -182,16 +221,38 @@
           {/each}
         </tr>
       {/each}
+    {:else if data.length === 0 && $columns}
+      <!--
+        We don't have data, but we know which columns there are. Do render
+        columns, but set a placeholder item as content.
+      -->
+      {#each [...Array(items).keys()] as _row}
+        <tr>
+          {#each Object.getOwnPropertySymbols($columns) as _columnKey}
+            <td><div class="sdg-item-placeholder" /></td>
+          {/each}
+        </tr>
+      {/each}
+    {:else}
+      <!--
+        We might have data, but we don't know which columns there are. Render a
+        one-column placeholder until we receive information about the columns.
+      -->
+      {#each [...Array(items).keys()] as _row}
+        <tr><td><div class="sdg-item-placeholder" /></td></tr>
+      {/each}
     {/if}
   </tbody>
 </table>
+
+<slot name=resultInfo />
+
+<slot name=paginator />
 
 <!--
     By defining data as a slot prop, we can access it from the defining
     context. This allows for an easy way to communicate the data type to the
     columns, which then allows us to define functions for field access and
     custom rendering on the column itself.
-
-    This is also where the paginator will be rendered.
 -->
 <slot {data} />

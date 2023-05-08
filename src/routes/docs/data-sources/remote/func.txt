@@ -1,0 +1,10 @@
+import type { DataGridSource, SortDirection } from "svelte-datagrid";
+
+export const source: DataGridSource<TRow> = <TRow>(
+  page: number,           // Current page number
+  items: number,          // Number of items per page
+  search?: string,        // Search query
+  sortColumn?: symbol,    // ID of the sorted column
+  sortKey?: keyof TRow,   // Name of the variable backing the sorted column
+  order?: SortDirection   // Sort order (ascending/descending)
+);

@@ -1,13 +1,22 @@
-export type DataGridPageInfo = {
+export type SortDirection = 'asc' | 'desc';
+
+export type DataGridQuery = {
     page: number;
     items: number;
-    total: {
-        items: number;
-        filteredItems: number;
-        pages: number;
+    search?: string,
+    sort?: {
+        column: symbol;
+        direction: SortDirection;
     };
 };
 
-export type DataGridPage<TData> = DataGridPageInfo & {
+export type DataGridResult = {
+    items: number;
+    filteredItems: number;
+    pages: number;
+};
+
+export type DataGridPage<TData> = DataGridQuery & {
     data: TData[];
+    total?: DataGridResult
 };

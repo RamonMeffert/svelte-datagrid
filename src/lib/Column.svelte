@@ -17,7 +17,13 @@
     columns.update((c) => {
       const id = Symbol();
       const key = getKey();
-      c[id] = { id: id, key, header, value, render, align };
+      const col = { id: id, key, header, value, render, align };
+
+      if (c) {
+        c[id] = col;
+      } else {
+        c = { [id]: col }
+      }
       return c;
     });
   })
@@ -27,7 +33,7 @@
     const obj = new type();
     // Find the keys
     const keys = Object.keys(obj);
-    // Create an object mapping the key to the name of the key
+    // Create an object mapping the key to the name of the key itself
     const keyMap = keys.reduce((o, key) => ({ ...o, [key]: key}), {}) as TRow;
     // Use the value function to get the name of the key from the map
     return value(keyMap) as keyof TRow;

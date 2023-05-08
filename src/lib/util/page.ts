@@ -1,12 +1,13 @@
-import type { DataGridPage, DataGridPageInfo } from "$lib/types/DataGridPage.js";
-import type { SortDirection } from "$lib/types/DataGridSortInfo.js";
+import type { SortDirection } from "$lib/types/DataGridPage.js";
 import type { DataGridSource } from "$lib/types/DataGridSource.js";
 
 export const getPage = async <TRow>(
     source: DataGridSource<TRow>,
     page: number,
     items: number,
-    sort?: keyof TRow,
+    search?: string,
+    sortColumn?: symbol,
+    sortKey?: keyof TRow,
     order: SortDirection = 'asc'
 ) => {
     if (Array.isArray(source)) {
@@ -21,14 +22,6 @@ export const getPage = async <TRow>(
             }
         }
     } else {
-        return await source(page, items, sort, order);
+        return await source(page, items, search, sortColumn, sortKey, order);
     }
-}
-
-export const getPageInfoFromPage = <TRow>(page: DataGridPage<TRow>) => {
-    return {
-        page: page.page,
-        items: page.items,
-        total: page.total
-    } satisfies DataGridPageInfo;
 }

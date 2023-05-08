@@ -1,7 +1,7 @@
-import type { DataGridPage } from '$lib/types/DataGridPage.js';
+import type { DataGridPage, SortDirection } from '$lib/types/DataGridPage.js';
 import { page as pageStore } from '$app/stores';
 import { get } from 'svelte/store';
-import type { SortDirection } from '$lib/types/DataGridSortInfo.js';
+import type { DataGridSource } from '$lib/types/DataGridSource.js';
 
 export class Product {
   product_name!: string;
@@ -14,12 +14,14 @@ export class Product {
   manufacturer!: string;
 };
 
-export const getData = async (
+export const getData: DataGridSource<Product> = async (
   page: number,
   items: number,
-  sort: keyof Product | undefined,
+  search?: string,
+  sortColumn?: symbol,
+  sortKey?: keyof Product,
   order: SortDirection = 'asc',
-): Promise<DataGridPage<Product> | null> => {
+) => {
   const url: URL = new URL(get(pageStore).url.origin);
   url.pathname = '/api/products';
   
@@ -29,9 +31,12 @@ export const getData = async (
   if (items >= 1) {
     url.searchParams.set('limit', items.toString());
   }
-  if (sort) {
-    url.searchParams.set('sort', sort);
+  if (sortKey) {
+    url.searchParams.set('sort', sortKey);
     url.searchParams.set('order', order);
+  }
+  if (search) {
+    url.searchParams.set('q', search);
   }
 
   const response = await fetch(url);
@@ -39,16 +44,30 @@ export const getData = async (
   if (response.ok) {
     const responseData = await response.json();
     const totalPages = Math.ceil(responseData.total / responseData.limit);
-    return {
+    
+    const returnData: DataGridPage<Product> = {
       data: responseData.products,
       page: Math.floor((responseData.skip / responseData.total) * totalPages) + 1,
       items: responseData.limit,
       total: {
         items: responseData.total,
-        filteredItems: responseData.total,
+        filteredItems: responseData.filtered,
         pages: Math.ceil(responseData.total / responseData.limit)
       }
-    } satisfies DataGridPage<Product>;
+    };
+    
+    if (search) {
+      returnData.search = search;
+    }
+    
+    if (sortColumn) {
+      returnData.sort = {
+        column: sortColumn,
+        direction: order,
+      };
+    }
+
+    return returnData;
   }
   return null;
 };

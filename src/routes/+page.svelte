@@ -3,8 +3,10 @@
   import DataGrid from '$lib/DataGrid.svelte';
   import ListPaginator from '$lib/ListPaginator.svelte';
   import { HighlightSvelte } from 'svelte-highlight';
-  import examples from '$lib/demo/examples.js';
   import { Product, getData } from '$lib/demo/DummyJson.js';
+  import DataGridSearch from '$lib/DataGridSearch.svelte';
+  import ResultInfo from '$lib/ResultInfo.svelte';
+  import basicExample from './basic-example.txt?raw';
 </script>
 
 <section>
@@ -13,12 +15,13 @@
     <p>Type-safe tables!</p>
   </hgroup>
 
-  <a href="/demo" role="button" class="outline">Demo</a>
   <a href="/docs" role="button">Get started</a>
+  <a href="/demo" role="button" class="outline">Demo</a>
 </section>
 
 <figure>
   <DataGrid source={getData} type={Product} let:data items={5}>
+    <DataGridSearch slot=search />
     <Column {data} header="Product" value={(d) => d.product_name} />
     <Column {data} header="Manufacturer" value={(d) => d.manufacturer} />
     <Column {data}
@@ -32,11 +35,12 @@
       render={(d) => `€ ${d.price.toFixed(2)}`}
       align="right"
     />
-    <ListPaginator />
+    <ResultInfo slot=resultInfo />
+    <ListPaginator slot=paginator />
   </DataGrid>
 </figure>
 
-<HighlightSvelte code={examples.home.basic} />
+<HighlightSvelte code={basicExample} />
 
 <style>
   :global(.sdg-paginator) {

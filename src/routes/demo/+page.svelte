@@ -3,7 +3,7 @@
   import Column from '$lib/Column.svelte';
   import ListPaginator from '$lib/ListPaginator.svelte';
   import DropdownPaginator from '$lib/DropdownPaginator.svelte';
-  import { getData } from '$lib/demo/DummyJson.js';
+  import { Product, getData } from '$lib/demo/DummyJson.js';
   import Highlight from 'svelte-highlight';
   import typescript from 'svelte-highlight/languages/typescript';
 
@@ -44,10 +44,10 @@
     <Highlight language={typescript} code={remoteDataExample} />
 
     <figure>
-      <DataGrid source={getData} let:data>
-        <Column {data} value={(d) => d.title} header="Product" />
-        <Column {data} value={(d) => d.brand} header="Brand" />
-        <Column {data} value={(d) => d.category} header="Category" />
+      <DataGrid source={getData} type={Product} let:data>
+        <Column {data} value={(d) => d.product_name} header="Product" />
+        <Column {data} value={(d) => d.manufacturer} header="Brand" />
+        <Column {data} value={(d) => d.release_date} header="Released" />
         <Column
           {data}
           value={(d) => d.price}
@@ -55,7 +55,6 @@
           render={(p) => `€ ${p.price.toFixed(2)}`}
           align="right"
         />
-        <Column {data} value={(d) => d.discountPercentage} header="Discount" align="right" />
         <ListPaginator />
       </DataGrid>
     </figure>
