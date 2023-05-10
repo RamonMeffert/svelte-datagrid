@@ -10,7 +10,7 @@ customisability.
 ## Getting started
 
 > **Note**  
-> Full documentation is available on _documentation site in progress_
+> Full documentation is available on <https://svelte-datagrid.pages.dev/docs>.
 
 A basic table looks like this:
 
