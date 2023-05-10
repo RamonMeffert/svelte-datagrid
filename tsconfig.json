@@ -11,5 +11,13 @@
 		"strict": true,
 		"moduleResolution": "NodeNext",
 		"types": ["vitest/globals", "@testing-library/jest-dom"],
+		"paths": {
+			"$lib": [
+				"./src/lib"
+			],
+			"$lib/*": [
+				"./src/lib/*"
+			]
+		}
 	},
 }

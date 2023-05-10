@@ -8,10 +8,12 @@
 </script>
 
 {#if $resultInfo}
-  <div>
-    {$resultInfo.filteredItems.toLocaleString()} results
-    {#if $resultInfo.filteredItems !== $resultInfo.items}
-      (filtered from {$resultInfo.items.toLocaleString()} total results)
-    {/if}
+  <div class='sdg-result-info'>
+    <small>
+      {$resultInfo.filteredItems.toLocaleString()} results
+      {#if $resultInfo.filteredItems !== $resultInfo.items}
+        (filtered from {$resultInfo.items.toLocaleString()} total results)
+      {/if}
+    </small>
   </div>
 {/if}

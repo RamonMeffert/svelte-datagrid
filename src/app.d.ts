@@ -4,7 +4,9 @@ declare global {
 	namespace App {
 		// interface Error {}
 		// interface Locals {}
-		// interface PageData {}
+		interface PageData {
+			containerFluid: bool = false
+		}
 		// interface Platform {}
 	}
 	declare const __version__: string;
