@@ -1,14 +1,14 @@
 <script lang="ts">
-  import Column from '$lib/Column.svelte';
-  import DataGrid from '$lib/DataGrid.svelte';
-  import ListPaginator from '$lib/ListPaginator.svelte';
+  import Column from '$lib/components/Column.svelte';
+  import DataGrid from '$lib/components/DataGrid.svelte';
+  import DataGridSearch from '$lib/components/DataGridSearch.svelte';
+  import ListPaginator from '$lib/components/ListPaginator.svelte';
+  import ResultInfo from '$lib/components/ResultInfo.svelte';
+  import { Product, getData } from '$demo/DummyJson.js';
+  import Icon from '$demo/Icon.svelte';
+  import CopyIcon from '$demo/CopyIcon.svelte';
   import { HighlightSvelte } from 'svelte-highlight';
-  import { Product, getData } from '$lib/demo/DummyJson.js';
-  import DataGridSearch from '$lib/DataGridSearch.svelte';
-  import ResultInfo from '$lib/ResultInfo.svelte';
   import basicExample from './basic-example.txt?raw';
-  import Icon from '../../demo/Icon.svelte';
-  import CopyIcon from '../../demo/CopyIcon.svelte';
 
   const copyInstallCodeInitialValue = 'Copy to clipboard';
   let copyInstallCodeText = copyInstallCodeInitialValue;

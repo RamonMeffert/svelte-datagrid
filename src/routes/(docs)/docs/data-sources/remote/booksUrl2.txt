@@ -1,0 +1,24 @@
+async function getBooks(
+  page: number,
+  items: number,
+  search?: string,
+  sortColumn?: symbol,
+  sortKey?: keyof Book,
+  order: SortDirection = 'asc',
+) {
+  const endpointUrl = new URL('https://api.library.fake/v1/books');
+
+  // We only need to add the parameter when we're beyond page 1.
+  if (page > 1) {
+    const itemsToSkip = (page - 1) * items;
+    endpointUrl.searchParams.set('skip', itemsToSkip.toString());
+  }
+
+  // We know the library returns 20 books by default, so we'll only add the
+  // parameter when we want to specify a different number of items.
+  if (items > 20) {
+    endpointUrl.searchParams.set('limit', items.toString());
+  }
+
+  const response = await fetch(endpointUrl);
+} satisfies DataGridSource<Book>;

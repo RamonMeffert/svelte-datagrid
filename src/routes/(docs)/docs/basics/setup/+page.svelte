@@ -4,13 +4,14 @@
   import book from './book.txt?raw';
   import bookList from './book-list.txt?raw';
   import bookTable from './book-table.txt?raw';
+  import Heading from "$demo/Heading.svelte";
 </script>
 
-<h1>Setup</h1>
+<Heading level=h1 content=Setup />
 
 <p>Bla bla bla</p>
 
-<h2>Preparation</h2>
+<Heading level=h2 content=Preparation />
 
 <p>
   To get a type-safe table, we must first make sure we have types. A table can
@@ -20,7 +21,7 @@
 
 <Highlight language={typescript} code={book} />
 
-<h2>A basic example</h2>
+<Heading level=h2 content='A basic example' />
 
 <p>
   Suppose we have a list of books

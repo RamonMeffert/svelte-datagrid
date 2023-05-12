@@ -1,10 +1,14 @@
-<h1>Pagination</h1>
+<script lang=ts>
+  import Heading from "$demo/Heading.svelte";
+</script>
+
+<Heading level=h1 content=Pagination />
 
 <p>
   This library offers two different types of pagination.
 </p>
 
-<h2>List-style pagination</h2>
+<Heading level=h2 content='List-style pagination' />
 
 <p>
   Pages are represented by a list of page numbers. The first and last page
@@ -16,9 +20,7 @@
 <!-- TODO: Add example of list-style pagination -->
 <pre><code>Add example</code></pre>
 
-<h2>
-  Dropdown-style pagination
-</h2>
+<Heading level=h2 content='Dropdown-style pagination' />
 
 <p>
   Page numbers are presented in a drop-down selector. When the users picks and

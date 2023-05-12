@@ -2,4 +2,4 @@
   import Heading from "$demo/Heading.svelte";
 </script>
 
-<Heading level=h1 content='Introduction'/>
+<Heading content="Sorting" level=h1 />

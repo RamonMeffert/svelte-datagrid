@@ -1,4 +1,8 @@
-<h1>Local data</h1>
+<script lang=ts>
+  import Heading from "$demo/Heading.svelte";
+</script>
+
+<Heading level=h1 content='Local data' />
 
 <p>
   Local data is any data that exists in your Javascript code. This works

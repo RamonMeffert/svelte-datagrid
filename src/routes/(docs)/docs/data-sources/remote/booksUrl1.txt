@@ -1,0 +1,10 @@
+async function getBooks(
+  page: number,
+  items: number,
+  search?: string,
+  sortColumn?: symbol,
+  sortKey?: keyof Book,
+  order: SortDirection = 'asc',
+) {
+  const endpointUrl = new URL('https://api.library.fake/v1/books');
+} satisfies DataGridSource<Book>;

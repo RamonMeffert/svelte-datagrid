@@ -1,4 +1,6 @@
 <script lang=ts>
+  import Heading from "$demo/Heading.svelte";
+
   let pm = 'bun';
   const pmCode: { [key: string]: string} = {
     ['bun']: 'bun i svelte-datagrid',
@@ -8,8 +10,7 @@
   }
 </script>
 
-<h1>Installation</h1>
-
+<Heading level=h1 content=Installation />
 
 <div class=tabs>
   <button class:current={pm === 'bun'} on:click={() => pm = 'bun'}>bun</button>
@@ -39,8 +40,5 @@
 
   .tabs button.current {
     border-bottom: 2px solid var(--primary);
-  }
-
-  .tabs button.sc {
   }
 </style>

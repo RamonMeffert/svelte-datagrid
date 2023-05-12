@@ -1,9 +1,8 @@
 <script lang="ts">
-  import DataGrid from '$lib/DataGrid.svelte';
-  import Column from '$lib/Column.svelte';
-  import ListPaginator from '$lib/ListPaginator.svelte';
-  import DropdownPaginator from '$lib/DropdownPaginator.svelte';
-  import { Product, getData } from '$lib/demo/DummyJson.js';
+  import { Product, getData } from '$demo/DummyJson.js';
+  import Column from '$lib/components/Column.svelte';
+  import DataGrid from '$lib/components/DataGrid.svelte';
+  import ListPaginator from '$lib/components/ListPaginator.svelte';
   import Highlight from 'svelte-highlight';
   import typescript from 'svelte-highlight/languages/typescript';
 
@@ -13,10 +12,7 @@
 </script>
 
 <header class="container">
-  <hgroup>
-    <h1>svelte-datagrid</h1>
-    <p>Developer-friendly and blazing fast 🔥</p>
-  </hgroup>
+  <h1>Demo</h1>
   <aside>
     <nav>
       <ul>

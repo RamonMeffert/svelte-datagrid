@@ -1,0 +1,17 @@
+export type SortDirection = 'asc' | 'desc';
+
+export type DataGridPage<TRow> = {
+  data: TRow[];
+  page: number;
+  items: number;
+  search?: string,
+  sort?: {
+    column: symbol;
+    direction: SortDirection;
+  };
+  total?: {
+    items: number;
+    filteredItems: number;
+    pages: number;
+  }
+};

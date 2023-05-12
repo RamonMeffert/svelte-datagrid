@@ -2,8 +2,9 @@
   import { page } from '$app/stores';
   import '@picocss/pico/css/pico.min.css';
   import 'svelte-highlight/styles/github-dark.css';
-  import DevWarning from '../../../demo/DevWarning.svelte';
-  import Nav from '../../../demo/Nav.svelte';
+  import DevWarning from '$demo/DevWarning.svelte';
+  import Nav from '$demo/Nav.svelte';
+  import Footer from '$demo/Footer.svelte';
 
   const version = __version__;
 
@@ -19,7 +20,7 @@
       url: 'getting-started',
       pages: [
         { name: 'Introduction', url: 'introduction' },
-        { name: 'Installation', url: 'installation' }
+        { name: 'Installation', url: 'installation' },
       ]
     },
     {
@@ -28,7 +29,8 @@
       pages: [
         { name: 'Setup', url: 'setup' },
         { name: 'Pagination', url: 'pagination' },
-        { name: 'Search', url: 'search' }
+        { name: 'Search', url: 'search' },
+        { name: 'Sorting', url: 'sorting' },
       ]
     },
     {
@@ -36,7 +38,7 @@
       url: 'data-sources',
       pages: [
         { name: 'Local data', url: 'local' },
-        { name: 'Remote data', url: 'remote' }
+        { name: 'Remote data', url: 'remote' },
       ]
     },
     {
@@ -82,6 +84,8 @@
   </div>
 </div>
 
+<Footer />
+
 <style scoped>
   .grid {
     border-top: var(--border-width) solid var(--accordion-border-color);
@@ -119,15 +123,5 @@
     padding: var(--block-spacing-vertical) 0;
     padding-left: var(--spacing);
     max-width: 80ex;
-  }
-
-  .dev-warning {
-    text-align: center;
-    display: flex;
-    padding: 0.4rem;
-    align-items: center;
-    justify-content: center;
-    background-color: rgba(255, 221, 0, 0.2);
-    border-bottom: 1px solid rgba(255, 221, 0, 0.2);
   }
 </style>

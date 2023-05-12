@@ -20,6 +20,6 @@
   <ul>
     <li><a href="/demo">Demo</a></li>
     <li><a href="/docs">Documentation</a></li>
-    <li><a target="_blank" href="https://github.com/RamonMeffert/svelte-datagrid"><GitHubIcon /></a></li>
+    <li><a target="_blank" title="GitHub" href="https://github.com/RamonMeffert/svelte-datagrid"><GitHubIcon /></a></li>
   </ul>
 </nav>

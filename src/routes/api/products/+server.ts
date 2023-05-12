@@ -1,4 +1,4 @@
-import type { Product } from '$lib/demo/DummyJson.js';
+import type { Product } from '$demo/DummyJson.js';
 import type { RequestHandler } from './$types.js';
 
 export const GET: RequestHandler = async ({ fetch, url }) => {
