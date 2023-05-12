@@ -1,11 +1,10 @@
 <script lang="ts">
+  import { type DataGridContext, key } from '$lib/types/DataGridContext.js';
   import { getContext } from 'svelte';
-  import { type DataGridContext, key } from './DataGridContext.js';
 
   type TRow = $$Generic;
 
   const { query, resultInfo } = getContext<DataGridContext<TRow>>(key);
-
 </script>
 
 <div class="paginator">

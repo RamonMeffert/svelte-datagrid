@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { key, type DataGridContext } from './DataGridContext.js';
+  import { key, type DataGridContext } from '$lib/types/DataGridContext.js';
+  import type { TextAlignment, ValueGetter, ValueRenderer } from '$lib/types/DataGridColumn.js';
   import { getContext, onMount } from 'svelte';
-  import type { TextAlignment, ValueGetter, ValueRenderer } from './types/DataGridColumn.js';
 
   type TRow = $$Generic<object>;
 

@@ -1,8 +1,7 @@
 <script lang=ts>
-  import type { DataGridResult } from './types/DataGridPage.js';
-
+  import { type DataGridContext, key } from '$lib/types/DataGridContext.js';
+  import type { DataGridResult } from '../types/DataGridPage.js';
   import { getContext } from 'svelte';
-  import { key, type DataGridContext } from './DataGridContext.js';
 
   type TRow = $$Generic;
 

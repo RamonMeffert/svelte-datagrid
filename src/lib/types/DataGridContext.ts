@@ -1,6 +1,6 @@
+import type { DataGridColumn } from "$lib/types/DataGridColumn.js";
+import type { DataGridQuery, DataGridResult } from "$lib/types/DataGridPage.js";
 import type { Writable } from "svelte/store";
-import type { DataGridColumn } from "./types/DataGridColumn.js";
-import type { DataGridQuery, DataGridResult } from "./types/DataGridPage.js";
 
 // Key for context api
 export const key = Symbol();

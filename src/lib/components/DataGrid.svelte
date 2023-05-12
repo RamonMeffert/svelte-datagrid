@@ -1,12 +1,16 @@
 <script lang="ts">
-  import { browser } from '$app/environment';
+  import { getPage } from '$lib/util/page.js';
 
-  import type { DataGridSource } from './types/DataGridSource.js';
-  import type { DataGridPage, DataGridQuery, DataGridResult } from './types/DataGridPage.js';
-  import type { DataGridColumn } from './types/DataGridColumn.js';
-  import { getStyle } from './util/style.js';
-  import { getPage } from './util/page.js';
-  import { key, type DataGridContext } from './DataGridContext.js';
+  import { getStyle } from '$lib/util/style.js';
+
+  import { key, type DataGridContext } from '$lib/types/DataGridContext.js';
+
+  import type { DataGridPage, DataGridQuery, DataGridResult } from '$lib/types/DataGridPage.js';
+
+  import type { DataGridColumn } from '$lib/types/DataGridColumn.js';
+
+  import type { DataGridSource } from '$lib/types/DataGridSource.js';
+
   import { onDestroy, onMount, setContext } from 'svelte';
   import { writable } from 'svelte/store';
 
@@ -51,6 +55,7 @@
 
   /* ===== Internal variables =============================================== */
 
+  let initializing = true;
   let loading = false;
 
   // Result from data source. Contains info about pagination
@@ -75,32 +80,31 @@
   /* ===== Functions ======================================================== */
 
   async function update() {
-    if (browser) {
-      loading = true;
+    loading = true;
 
-      const sortKey =
-        $columns && $query.sort ? $columns?.[$query.sort?.column].key : undefined;
+    const sortKey =
+      $columns && $query.sort ? $columns?.[$query.sort?.column].key : undefined;
 
-      page = await getPage(
-        source,
-        $query.page ?? 1,
-        $query.items ?? items,
-        $query.search,
-        $query.sort?.column,
-        sortKey,
-        $query.sort?.direction
-      );
+    page = await getPage(
+      source,
+      $query.page ?? 1,
+      $query.items ?? items,
+      $query.search,
+      $query.sort?.column,
+      sortKey,
+      $query.sort?.direction
+    );
 
-      resultInfo.update(ri => {
-        if (page?.total) {
-          ri = page.total;
-        }
+    resultInfo.update(ri => {
+      if (page?.total) {
+        ri = page.total;
+      }
 
-        return ri;
-      });
+      return ri;
+    });
 
-      loading = false;
-    }
+    initializing = false;
+    loading = false;
   }
 
   /**
@@ -211,17 +215,26 @@
     </tr>
   </thead>
   <tbody>
-    {#if data.length !== 0 && $columns}
+    {#if !initializing && $columns}
+      {@const columnKeys = Object.getOwnPropertySymbols($columns)}
       <!-- We have everything we need, render normally -->
-      {#each data as row}
+      {#if data.length === 0}
         <tr>
-          {#each Object.getOwnPropertySymbols($columns) as columnKey}
-            {@const column = $columns[columnKey]}
-            <td>{column.render(row)}</td>
-          {/each}
+          <td colspan={columnKeys.length}>
+            <div class="sdg-no-data">No data.</div>
+          </td>
         </tr>
-      {/each}
-    {:else if data.length === 0 && $columns}
+      {:else}
+        {#each data as row}
+          <tr>
+            {#each columnKeys as columnKey}
+              {@const column = $columns[columnKey]}
+              <td>{column.render(row)}</td>
+            {/each}
+          </tr>
+        {/each}
+      {/if}
+    {:else if initializing && $columns}
       <!--
         We don't have data, but we know which columns there are. Do render
         columns, but set a placeholder item as content.

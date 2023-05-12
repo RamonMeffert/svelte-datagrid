@@ -1,8 +1,7 @@
 <script lang="ts">
-  import { debounce } from './util/debounce.js';
-
+  import { key, type DataGridContext } from '$lib/types/DataGridContext.js';
+  import { debounce } from '$lib/util/debounce.js';
   import { getContext } from 'svelte';
-  import { key, type DataGridContext } from './DataGridContext.js';
 
   type TRow = $$Generic;
 
