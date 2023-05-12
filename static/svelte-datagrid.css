@@ -43,6 +43,7 @@ button.sdg-table-head.asc::after {
   background-color: transparent;
   cursor: pointer;
   padding: 0;
+  color: inherit;
 }
 
 .sdg-paginator .sdg-paginator-button:hover {
@@ -100,4 +101,11 @@ button.sdg-table-head.asc::after {
 .sdg-result-info {
   text-align: right;
   margin-bottom: .5rem;
+}
+
+.sdg-no-data {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
 }
