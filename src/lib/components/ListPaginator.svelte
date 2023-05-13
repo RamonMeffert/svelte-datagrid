@@ -5,7 +5,8 @@
 
   type TRow = $$Generic;
 
-  /** The number of page links to show  */
+  /** The number of page numbers to show when the current page is not near the
+    first or last page. */
   export let window = 3;
 
   const { query, resultInfo } = getContext<DataGridContext<TRow>>(key);
@@ -54,9 +55,31 @@
 </script>
 
 <!--
-    @component
-    A paginator that shows a list of page numbers, along with next and previous
-    buttons.
+  @component
+  A paginator that shows a list of page numbers, along with next and previous
+  buttons.
+
+  **Usage**
+
+  ```tsx
+  <DataGrid ... >
+    <ListPaginator slot=paginator />
+  </DataGrid>
+  ```
+
+  **Properties**
+
+  - `window` _(optional)_ When the current page is not near the first or last
+    page, the amount of page numbers to show. For example, when the window is 3,
+    the paginator will show
+
+      1 … 6 **7** 8 … 14
+
+    while a window of 5 would show
+
+      1 … 5 6 **7** 8 9 … 14
+
+    Defaults to 3.
 -->
 
 <div class="sdg-paginator">

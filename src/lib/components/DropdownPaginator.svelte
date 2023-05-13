@@ -7,6 +7,20 @@
   const { query, resultInfo } = getContext<DataGridContext<TRow>>(key);
 </script>
 
+<!--
+  @component
+  A paginator that shows a dropdown menu, allowing users to select a specific
+  page, as well as next and previous buttons.
+  
+  **Usage**
+
+  ```tsx
+  <DataGrid ... >
+    <DropdownPaginator slot=paginator />
+  </DataGrid>
+  ```
+-->
+
 <div class="paginator">
   {#if $resultInfo}
     {@const current = $query.page}

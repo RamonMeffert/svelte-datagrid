@@ -182,6 +182,41 @@
   });
 </script>
 
+<!--
+  @component
+  Type-safe datagrid component.
+
+  **Usage**
+
+  ```tsx
+  <DataGrid type={Class} source={getData} items={10} let:data>
+    // Place <Column>s here
+  </DataGrid>
+  ```
+
+  **Properties**
+
+  - `type` **(required)** Class constructor
+  - `source` **(required)** The data source for the grid. Can be a list of
+    objects or a async method implementing the `DataSource<TRow>` type.
+  - `items` _(optional)_ The number of items to show on a page. Defaults to 10.
+
+  **Slots**
+
+  The slots are positioned like this:
+
+  ```tsx
+  <slot name=search />
+  <DataGrid />
+  <slot name=resultInfo />
+  <slot name=paginator />
+  ```
+
+  - `search` - Location for a search bar.
+  - `resultInfo` - Location for metadata.
+  - `paginator` - Location for a paginator.
+ -->
+
 <svelte:head>
   {@html `<style>${style}</style>`}
 </svelte:head>

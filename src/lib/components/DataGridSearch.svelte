@@ -25,4 +25,24 @@
   };
 </script>
 
+<!-- 
+  @component Search bar for a datagrid. Should be placed inside the `<DataGrid>`
+  with the slot name specified.
+
+  **Usage**
+
+  ```tsx
+    <DataGrid ... />
+      <DataGridSearch slot=search />
+    </DataGrid>
+  ```
+
+  **Properties**
+
+  - `placeholder` _(optional)_ - The placeholder that is shown when the search
+    field is empty. Defaults to 'Search'.
+  - `delay` _(optional)_ - Debounce time (in ms). The time a user needs to have
+    stopped typing before the search is submitted.
+ -->
+
 <input bind:value use:debounce={{ value, func: search, delay: delay }} type="search" {placeholder} />
