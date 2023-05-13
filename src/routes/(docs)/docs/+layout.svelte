@@ -21,7 +21,7 @@
       pages: [
         { name: 'Introduction', url: 'introduction' },
         { name: 'Installation', url: 'installation' },
-      ]
+      ],
     },
     {
       name: 'Basics',
@@ -31,7 +31,7 @@
         { name: 'Pagination', url: 'pagination' },
         { name: 'Search', url: 'search' },
         { name: 'Sorting', url: 'sorting' },
-      ]
+      ],
     },
     {
       name: 'Data sources',
@@ -39,13 +39,13 @@
       pages: [
         { name: 'Local data', url: 'local' },
         { name: 'Remote data', url: 'remote' },
-      ]
+      ],
     },
     {
       name: 'Customization',
       url: 'customization',
-      pages: [{ name: 'Stylesheets', url: 'stylesheets' }]
-    }
+      pages: [{ name: 'Stylesheets', url: 'stylesheets' }],
+    },
   ];
 </script>
 

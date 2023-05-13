@@ -1,4 +1,4 @@
-<script lang=ts>
+<script lang="ts">
   export let height: string = '1em';
   export let strokeWidth: string = '2';
 </script>
@@ -7,10 +7,10 @@
   version="1.1"
   xmlns="http://www.w3.org/2000/svg"
   viewBox="0 0 32 16"
-  height="{height}"
+  {height}
   fill="none"
   stroke="currentColor"
-  stroke-width="{strokeWidth}"
+  stroke-width={strokeWidth}
   style="vertical-align: -10%"
   stroke-linecap="round"
   stroke-linejoin="round"

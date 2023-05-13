@@ -1,4 +1,4 @@
-import type { ActionReturn } from "svelte/action";
+import type { ActionReturn } from 'svelte/action';
 
 /**
  * Debounce function for use in a Svelte use: action.
@@ -9,7 +9,7 @@ import type { ActionReturn } from "svelte/action";
  */
 export function debounce<F extends () => void>(
   _node: HTMLElement,
-  params: { value: any, func: F; delay: number }
+  params: { value: any; func: F; delay: number },
 ): ActionReturn {
   let timeout: ReturnType<typeof setTimeout>;
 
@@ -20,6 +20,6 @@ export function debounce<F extends () => void>(
     },
     destroy() {
       clearTimeout(timeout);
-    }
+    },
   };
 }

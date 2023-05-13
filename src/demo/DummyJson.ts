@@ -12,7 +12,7 @@ export class Product {
   height!: number;
   width!: number;
   manufacturer!: string;
-};
+}
 
 export const getData: DataGridSource<Product> = async (
   page: number,
@@ -24,7 +24,7 @@ export const getData: DataGridSource<Product> = async (
 ) => {
   const url: URL = new URL(get(pageStore).url.origin);
   url.pathname = '/api/products';
-  
+
   if (page >= 1) {
     url.searchParams.set('skip', ((page - 1) * items).toString());
   }
@@ -44,7 +44,7 @@ export const getData: DataGridSource<Product> = async (
   if (response.ok) {
     const responseData = await response.json();
     const totalPages = Math.ceil(responseData.total / responseData.limit);
-    
+
     const returnData: DataGridPage<Product> = {
       data: responseData.products,
       page: Math.floor((responseData.skip / responseData.total) * totalPages) + 1,
@@ -52,14 +52,14 @@ export const getData: DataGridSource<Product> = async (
       total: {
         items: responseData.total,
         filteredItems: responseData.filtered,
-        pages: Math.ceil(responseData.total / responseData.limit)
-      }
+        pages: Math.ceil(responseData.total / responseData.limit),
+      },
     };
-    
+
     if (search) {
       returnData.search = search;
     }
-    
+
     if (sortColumn) {
       returnData.sort = {
         column: sortColumn,

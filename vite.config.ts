@@ -8,14 +8,14 @@ const json = readFileSync(file, 'utf8');
 const pkg = JSON.parse(json);
 
 export default defineConfig({
-	plugins: [sveltekit()],
-	test: {
-		globals: true,
-		environment: 'jsdom',
-		include: ['src/**/*.{test,spec}.ts'],
-		setupFiles: ['./testSetup.ts'],
-	},
-	define: {
-		__version__: JSON.stringify(pkg.version)
-	}
+  plugins: [sveltekit()],
+  test: {
+    globals: true,
+    environment: 'jsdom',
+    include: ['src/**/*.{test,spec}.ts'],
+    setupFiles: ['./testSetup.ts'],
+  },
+  define: {
+    __version__: JSON.stringify(pkg.version),
+  },
 });

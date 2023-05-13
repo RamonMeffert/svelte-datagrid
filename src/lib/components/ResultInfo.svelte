@@ -23,7 +23,7 @@
 -->
 
 {#if $resultInfo}
-  <div class='sdg-result-info'>
+  <div class="sdg-result-info">
     <small>
       {$resultInfo.filteredItems.toLocaleString()} results
       {#if $resultInfo.filteredItems !== $resultInfo.items}

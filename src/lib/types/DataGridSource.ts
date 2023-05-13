@@ -7,6 +7,6 @@ export type DataGridSource<TRow> =
       search?: string,
       sortColumn?: symbol,
       sortKey?: keyof TRow,
-      order?: SortDirection
+      order?: SortDirection,
     ) => Promise<DataGridPage<TRow> | null>)
   | TRow[];

@@ -45,4 +45,9 @@
     stopped typing before the search is submitted.
  -->
 
-<input bind:value use:debounce={{ value, func: search, delay: delay }} type="search" {placeholder} />
+<input
+  bind:value
+  use:debounce={{ value, func: search, delay: delay }}
+  type="search"
+  {placeholder}
+/>

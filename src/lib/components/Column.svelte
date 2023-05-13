@@ -1,7 +1,12 @@
 <!-- svelte-ignore unused-export-let -->
 <script lang="ts">
   import { key, type DataGridContext } from '$lib/types/DataGridContext.js';
-  import type { DataGridColumn, TextAlignment, ValueGetter, ValueRenderer } from '$lib/types/DataGridColumn.js';
+  import type {
+    DataGridColumn,
+    TextAlignment,
+    ValueGetter,
+    ValueRenderer,
+  } from '$lib/types/DataGridColumn.js';
   import { getContext, onMount } from 'svelte';
 
   type TRow = $$Generic<object>;
@@ -9,7 +14,7 @@
   /** The data attribute is used to infer the datatype of the objects passed
    * into it. */
   export let data: TRow[];
-  
+
   /** The header for this column. Defaults to the name of the variable selected
    * in the `value` property. */
   export let header: string = '';
@@ -31,7 +36,7 @@
 
   onMount(() => {
     // Add the current column to the column store
-    columns.update((c) => {
+    columns.update(c => {
       // Create a unique identifier
       const id = Symbol();
       // Find the key string based on the `value` selector

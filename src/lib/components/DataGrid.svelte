@@ -40,7 +40,7 @@
   // for that.
   const query = writable<DataGridQuery>({
     page: 1,
-    items: items
+    items: items,
   });
 
   const resultInfo = writable<DataGridResult | undefined>();
@@ -50,7 +50,7 @@
     type,
     columns,
     query,
-    resultInfo
+    resultInfo,
   });
 
   /* ===== Internal variables =============================================== */
@@ -82,8 +82,7 @@
   async function update() {
     loading = true;
 
-    const sortKey =
-      $columns && $query.sort ? $columns?.[$query.sort?.column].key : undefined;
+    const sortKey = $columns && $query.sort ? $columns?.[$query.sort?.column].key : undefined;
 
     page = await getPage(
       source,
@@ -92,7 +91,7 @@
       $query.search,
       $query.sort?.column,
       sortKey,
-      $query.sort?.direction
+      $query.sort?.direction,
     );
 
     resultInfo.update(ri => {
@@ -109,7 +108,7 @@
 
   /**
    * Read query parameters to set pagination and search
-   * 
+   *
    * @param url
    */
   function getPaginationInfoFromUrl(url: string) {
@@ -128,7 +127,7 @@
   }
 
   const setSort = (columnKey: symbol) => {
-    query.update((pi) => {
+    query.update(pi => {
       if (pi) {
         // If a column is already sorted,
         if (pi?.sort?.column === columnKey) {
@@ -145,7 +144,7 @@
           // Set the clicked column as sorted.
           pi.sort = {
             column: columnKey,
-            direction: 'asc'
+            direction: 'asc',
           };
         }
       }
@@ -161,12 +160,12 @@
     const {
       page: urlPage,
       items: urlItems,
-      search
+      search,
     } = getPaginationInfoFromUrl(document.location.href);
 
     // Update all fields of pageInfo store at once to reduce number of calls
     // to update()
-    query.update((pi) => {
+    query.update(pi => {
       pi.items = urlItems ?? items;
       pi.page = urlPage ?? 1;
       if (search) {
@@ -293,9 +292,9 @@
   </tbody>
 </table>
 
-<slot name=resultInfo />
+<slot name="resultInfo" />
 
-<slot name=paginator />
+<slot name="paginator" />
 
 <!--
     By defining data as a slot prop, we can access it from the defining

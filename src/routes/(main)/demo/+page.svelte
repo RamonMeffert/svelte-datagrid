@@ -41,14 +41,14 @@
 
     <figure>
       <DataGrid source={getData} type={Product} let:data>
-        <Column {data} value={(d) => d.product_name} header="Product" />
-        <Column {data} value={(d) => d.manufacturer} header="Brand" />
-        <Column {data} value={(d) => d.release_date} header="Released" />
+        <Column {data} value={d => d.product_name} header="Product" />
+        <Column {data} value={d => d.manufacturer} header="Brand" />
+        <Column {data} value={d => d.release_date} header="Released" />
         <Column
           {data}
-          value={(d) => d.price}
+          value={d => d.price}
           header="Price"
-          render={(p) => `€ ${p.price.toFixed(2)}`}
+          render={p => `€ ${p.price.toFixed(2)}`}
           align="right"
         />
         <ListPaginator />

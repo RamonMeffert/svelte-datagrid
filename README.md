@@ -16,10 +16,10 @@ A basic table looks like this:
 
 ```svelte
 <DataGrid type={Book} source={books} let:data>
-  <Column {data} header="Title"  value={b => b.title} />
+  <Column {data} header="Title" value={b => b.title} />
   <Column {data} header="Author" value={b => b.author} />
-  <Column {data} header="Price"  value={b => b.price} />
-  <ListPaginator slot=paginator />
+  <Column {data} header="Price" value={b => b.price} />
+  <ListPaginator slot="paginator" />
 </DataGrid>
 ```
 
