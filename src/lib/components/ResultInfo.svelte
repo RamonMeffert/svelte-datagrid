@@ -4,6 +4,13 @@
 
   type TRow = $$Generic;
 
+  /** Term to use when there is only one result. Defaults to 'result'. */
+  export let sg = 'result';
+  
+  /** Term to use when there are zero, or more than one results. Defaults to
+   * 'results'. */
+  export let pl = 'results';
+
   const { resultInfo } = getContext<DataGridContext<TRow>>(key);
 </script>
 
@@ -25,9 +32,10 @@
 {#if $resultInfo}
   <div class="sdg-result-info">
     <small>
-      {$resultInfo.filteredItems.toLocaleString()} results
+      {$resultInfo.filteredItems.toLocaleString()}
+      {$resultInfo.filteredItems === 1 ? sg : pl}
       {#if $resultInfo.filteredItems !== $resultInfo.items}
-        (filtered from {$resultInfo.items.toLocaleString()} total results)
+        (filtered from {$resultInfo.items.toLocaleString()} total {$resultInfo.items === 1 ? sg : pl})
       {/if}
     </small>
   </div>
