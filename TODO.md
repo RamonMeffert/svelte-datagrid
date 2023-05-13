@@ -7,3 +7,4 @@
   - [ ] Documentation comments
 - [ ] Publish package to NPM
 - [ ] Test local data
+- [ ] Unit tests

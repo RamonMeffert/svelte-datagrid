@@ -9,7 +9,10 @@
   },
   "scripts": {
     "dev": "vite dev",
+    "prebuild": "sass src/styles:static -s compressed",
     "build": "vite build && bun run package",
+    "postbuild": "cp -R src/styles dist && sass dist/styles --no-charset --no-source-map",
+    "prebuild:cloudflare": "sass src/styles:static -s compressed",
     "build:cloudflare": "vite build && npm run package",
     "preview": "vite preview",
     "package": "svelte-kit sync && svelte-package && publint",
@@ -24,13 +27,13 @@
     ".": {
       "types": "./dist/index.d.ts",
       "svelte": "./dist/index.js"
-    }
+    },
+    "./styles/*": "./dist/styles/*"
   },
   "files": [
     "dist",
     "!dist/**/*.test.*",
-    "!dist/**/*.spec.*",
-    "static/svelte-datagrid.css"
+    "!dist/**/*.spec.*"
   ],
   "peerDependencies": {
     "svelte": "^3.54.0"
@@ -52,6 +55,7 @@
     "prettier": "^2.8.0",
     "prettier-plugin-svelte": "^2.8.1",
     "publint": "^0.1.9",
+    "sass": "^1.62.1",
     "svelte": "3.59.1",
     "svelte-check": "^3.0.1",
     "tslib": "^2.4.1",
