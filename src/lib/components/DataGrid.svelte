@@ -1,18 +1,13 @@
 <script lang="ts">
   import { getPage } from '$lib/util/page.js';
-
   import { getStyle } from '$lib/util/style.js';
-
   import { key, type DataGridContext } from '$lib/types/DataGridContext.js';
-
   import type { DataGridPage, DataGridQuery, DataGridResult } from '$lib/types/DataGridPage.js';
-
   import type { DataGridColumn } from '$lib/types/DataGridColumn.js';
-
   import type { DataGridSource } from '$lib/types/DataGridSource.js';
-
   import { onDestroy, onMount, setContext } from 'svelte';
   import { writable } from 'svelte/store';
+  import { BROWSER } from 'esm-env';
 
   // Type representing a row of data
   type TRow = $$Generic;
@@ -80,30 +75,32 @@
   /* ===== Functions ======================================================== */
 
   async function update() {
-    loading = true;
+    if (BROWSER) {
+      loading = true;
 
-    const sortKey = $columns && $query.sort ? $columns?.[$query.sort?.column].key : undefined;
+      const sortKey = $columns && $query.sort ? $columns?.[$query.sort?.column].key : undefined;
 
-    page = await getPage(
-      source,
-      $query.page ?? 1,
-      $query.items ?? items,
-      $query.search,
-      $query.sort?.column,
-      sortKey,
-      $query.sort?.direction,
-    );
+      page = await getPage(
+        source,
+        $query.page ?? 1,
+        $query.items ?? items,
+        $query.search,
+        $query.sort?.column,
+        sortKey,
+        $query.sort?.direction,
+      );
 
-    resultInfo.update(ri => {
-      if (page?.total) {
-        ri = page.total;
-      }
+      resultInfo.update(ri => {
+        if (page?.total) {
+          ri = page.total;
+        }
 
-      return ri;
-    });
+        return ri;
+      });
 
-    initializing = false;
-    loading = false;
+      initializing = false;
+      loading = false;
+    }
   }
 
   /**
@@ -263,7 +260,12 @@
           <tr>
             {#each columnKeys as columnKey}
               {@const column = $columns[columnKey]}
-              <td>{column.render(row)}</td>
+              {#if column.html}
+                {@const htmlToRender = column.render(row)}
+                <td>{@html htmlToRender}</td>
+              {:else}
+                <td>{column.render(row)}</td>
+              {/if}
             {/each}
           </tr>
         {/each}

@@ -9,4 +9,5 @@ export type DataGridColumn<TRow> = {
   value: ValueGetter<TRow>;
   render: ValueRenderer<TRow>;
   align?: TextAlignment;
+  html: boolean;
 };

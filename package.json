@@ -68,6 +68,7 @@
   "type": "module",
   "dependencies": {
     "@picocss/pico": "^1.5.10",
+    "esm-env": "^1.0.0",
     "slug": "^8.2.2",
     "svelte-highlight": "^7.2.1"
   }

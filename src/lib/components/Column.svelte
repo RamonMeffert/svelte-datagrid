@@ -31,6 +31,10 @@
    */
   export let render: ValueRenderer<TRow> = (row: TRow) => (value(row) as object).toString();
 
+  /** (Optional) Whether the rendered value should be interpreted as HTML using
+   * Svelte's @html directive. */
+  export let html: boolean = false;
+
   // Retrieve type constructor and column store from context
   const { type, columns } = getContext<DataGridContext<TRow>>(key);
 
@@ -46,7 +50,7 @@
         header = key.toString();
       }
       // Define the column object
-      const col: DataGridColumn<TRow> = { id, key, header, value, render, align };
+      const col: DataGridColumn<TRow> = { id, key, header, value, render, align, html };
 
       // If the columns object has been initialized, add the current column to
       // it. Otherwise, initialize the columns object with the current column as
