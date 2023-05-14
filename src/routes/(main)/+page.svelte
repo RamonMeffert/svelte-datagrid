@@ -9,6 +9,7 @@
   import CopyIcon from '$demo/CopyIcon.svelte';
   import { HighlightSvelte } from 'svelte-highlight';
   import basicExample from './basic-example.txt?raw';
+  import type { CustomFilters } from '$lib/types/DataGridPage.js';
 
   const copyInstallCodeInitialValue = 'Copy to clipboard';
   let copyInstallCodeText = copyInstallCodeInitialValue;
