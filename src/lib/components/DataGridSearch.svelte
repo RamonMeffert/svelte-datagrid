@@ -19,7 +19,7 @@
   const search = () => {
     if (value?.trim()) {
       $query.search = value;
-    } else {
+    } else if ($query.search) {
       $query.search = undefined;
     }
   };
