@@ -17,8 +17,11 @@ const getColumnStyle = <TRow>(index: number, column: DataGridColumn<TRow>) => {
     properties.push(`text-align: ${column.align}`);
   }
 
-  return [`td:nth-of-type(${index}), th:nth-of-type(${index}) {`, ...properties, '}']
-    .join(' ')
-    .replace(/\s+/, ' ')
-    .trim();
+  if (properties.length > 0) {
+    return [`td:nth-of-type(${index}), th:nth-of-type(${index}) {`, ...properties, '}']
+      .join(' ')
+      .replace(/\s+/, ' ')
+      .trim();
+  }
+  return '';
 };
