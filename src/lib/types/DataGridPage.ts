@@ -1,4 +1,5 @@
 export type SortDirection = 'asc' | 'desc';
+export type CustomFilters = { [key: string]: string | boolean | number };
 
 export type DataGridQuery = {
   page: number;
@@ -8,6 +9,7 @@ export type DataGridQuery = {
     column: symbol;
     direction: SortDirection;
   };
+  filters?: CustomFilters;
 };
 
 export type DataGridResult = {

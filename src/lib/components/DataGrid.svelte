@@ -2,7 +2,7 @@
   import { getPage } from '$lib/util/page.js';
   import { getStyle } from '$lib/util/style.js';
   import { key, type DataGridContext } from '$lib/types/DataGridContext.js';
-  import type { DataGridPage, DataGridQuery, DataGridResult } from '$lib/types/DataGridPage.js';
+  import type { CustomFilters, DataGridPage, DataGridQuery, DataGridResult } from '$lib/types/DataGridPage.js';
   import type { DataGridColumn } from '$lib/types/DataGridColumn.js';
   import type { DataGridSource } from '$lib/types/DataGridSource.js';
   import { onDestroy, onMount, setContext } from 'svelte';
@@ -22,6 +22,24 @@
 
   /** The number of items to show on a page. Defaults to 10. */
   export let items: number = 10;
+
+  /** 
+   * Note: These only work if `source` is a function.
+   * 
+   * (Optional) You can define custom filters. These are represented as
+   * key-value pairs, and are passed to the `source` function as-is.
+   * 
+   * An example of how you could use these would be when you have a list of
+   * books from a library, and you want to have a filter the shows only the
+   * books that are available to lend. You could define a checkbox that, when
+   * toggled, adds a key-value pair `{ showAvailable: true }`. You
+   * then have access in your `source` function to this list so you can process
+   * it as needed.
+   */
+  export let filters: CustomFilters | null = null;
+
+  /** Extra parameters needed by the `source` function. */
+  export let params: { [params: string]: string } | undefined = undefined;
 
   /* ===== Stores and Context API =========================================== */
 
@@ -67,10 +85,16 @@
   // Data should be reactive
   $: data = page?.data || [];
 
+  // Style should always be up-to-date
   $: style = $columns ? getStyle($columns) : '';
 
+  // When the custom filters change, they should be applied
+  $: if (filters) $query.filters = filters;
+
   // When the page changes, update the data
-  const unsubscribePageInfo = query.subscribe(update);
+  const unsubscribePageInfo = query.subscribe(() => {
+      update();
+  });
 
   /* ===== Functions ======================================================== */
 
@@ -88,6 +112,8 @@
         $query.sort?.column,
         sortKey,
         $query.sort?.direction,
+        $query.filters,
+        params
       );
 
       resultInfo.update(ri => {
@@ -162,14 +188,14 @@
 
     // Update all fields of pageInfo store at once to reduce number of calls
     // to update()
-    query.update(pi => {
-      pi.items = urlItems ?? items;
-      pi.page = urlPage ?? 1;
+    query.update(q => {
+      q.items = urlItems ?? items;
+      q.page = urlPage ?? 1;
       if (search) {
-        pi.search = search;
+        q.search = search;
       }
 
-      return pi;
+      return q;
     });
   });
 
@@ -237,9 +263,13 @@
           {@const column = $columns[columnKey]}
           {@const sort = $query.sort?.column === columnKey ? $query.sort.direction : ''}
           <th>
-            <button on:click={() => setSort(columnKey)} class="sdg-table-head {sort}">
+            {#if column.sortable}
+              <button on:click={() => setSort(columnKey)} class="sdg-table-head {sort}">
+                {column.header}
+              </button>
+            {:else}
               {column.header}
-            </button>
+            {/if}
           </th>
         {/each}
       {/if}

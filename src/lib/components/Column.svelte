@@ -35,6 +35,9 @@
    * Svelte's @html directive. */
   export let html: boolean = false;
 
+  /** Whether this column can be sorted by clicking the header. */
+  export let sortable: boolean = true;
+
   // Retrieve type constructor and column store from context
   const { type, columns } = getContext<DataGridContext<TRow>>(key);
 
@@ -45,12 +48,13 @@
       const id = Symbol();
       // Find the key string based on the `value` selector
       const key = getKey();
+
       // If no header is set, use the key as the header
       if (header === '') {
         header = key.toString();
       }
       // Define the column object
-      const col: DataGridColumn<TRow> = { id, key, header, value, render, align, html };
+      const col: DataGridColumn<TRow> = { id, key, header, value, render, align, html, sortable };
 
       // If the columns object has been initialized, add the current column to
       // it. Otherwise, initialize the columns object with the current column as

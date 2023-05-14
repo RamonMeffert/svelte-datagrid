@@ -1,4 +1,4 @@
-import type { SortDirection } from '$lib/types/DataGridPage.js';
+import type { CustomFilters, SortDirection } from '$lib/types/DataGridPage.js';
 import type { DataGridSource } from '$lib/types/DataGridSource.js';
 
 export const getPage = async <TRow>(
@@ -9,6 +9,8 @@ export const getPage = async <TRow>(
   sortColumn?: symbol,
   sortKey?: keyof TRow,
   order: SortDirection = 'asc',
+  filters?: CustomFilters,
+  params?: { [param: string]: string },
 ) => {
   if (Array.isArray(source)) {
     return {
@@ -18,10 +20,32 @@ export const getPage = async <TRow>(
       total: {
         items: source.length,
         pages: Math.ceil(source.length / items),
-        filteredItems: Math.ceil(source.length / items),
+        filteredItems: source.length,
       },
     };
   } else {
-    return await source(page, items, search, sortColumn, sortKey, order);
+    const result = await source(page, items, search, sortKey, order, filters, params);
+
+    if (result) {
+      // Re-add properties we need, but the user shouldn't have to deal with
+      if (search) {
+        result.search = search;
+      }
+
+      if (sortColumn) {
+        result.sort = {
+          column: sortColumn,
+          direction: order
+        }
+      }
+
+      if (filters) {
+        result.filters = filters;
+      }
+
+      return result;
+    }
+
+    return null;
   }
 };

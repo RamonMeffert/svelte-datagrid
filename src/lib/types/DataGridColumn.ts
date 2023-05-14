@@ -10,4 +10,5 @@ export type DataGridColumn<TRow> = {
   render: ValueRenderer<TRow>;
   align?: TextAlignment;
   html: boolean;
+  sortable: boolean;
 };
