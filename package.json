@@ -61,15 +61,15 @@
     "tslib": "^2.4.1",
     "typescript": "^5.0.0",
     "vite": "^4.3.0",
-    "vitest": "^0.25.3"
+    "vitest": "^0.25.3",
+    "@picocss/pico": "^1.5.10",
+    "slug": "^8.2.2",
+    "svelte-highlight": "^7.2.1"
   },
   "svelte": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "type": "module",
   "dependencies": {
-    "@picocss/pico": "^1.5.10",
-    "esm-env": "^1.0.0",
-    "slug": "^8.2.2",
-    "svelte-highlight": "^7.2.1"
+    "esm-env": "^1.0.0"
   }
 }
