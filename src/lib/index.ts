@@ -7,4 +7,4 @@ export { default as DropdownPaginator } from './components/DropdownPaginator.sve
 export { default as ResultInfo } from './components/ResultInfo.svelte';
 export { buildFetchUrl } from './util/searchParams.js';
 export type { DataGridPage, SortDirection, CustomFilters } from './types/DataGridPage.js';
-export type { DataGridSource, DataGridSourceParameters as DataGridSearchParameters } from './types/DataGridSource.js';
+export type { DataGridSource, DataGridSourceParameters } from './types/DataGridSource.js';
