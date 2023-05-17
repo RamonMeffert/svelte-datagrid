@@ -1,7 +1,7 @@
 {
   "name": "@ramon-meffert/svelte-datagrid",
   "license": "MIT",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "repository": "github:ramonmeffert/svelte-datagrid",
   "author": {
     "name": "Ramon Meffert",
