@@ -24,7 +24,7 @@ export const getPage = async <TRow>(
       },
     };
   } else {
-    const result = await source(page, items, search, sortKey, order, filters, params);
+    const result = await source({ page, items, search, sort: sortKey, order, filters, params });
 
     if (result) {
       // Re-add properties we need, but the user shouldn't have to deal with

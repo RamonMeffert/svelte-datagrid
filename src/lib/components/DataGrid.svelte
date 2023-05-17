@@ -2,7 +2,12 @@
   import { getPage } from '$lib/util/page.js';
   import { getStyle } from '$lib/util/style.js';
   import { key, type DataGridContext } from '$lib/types/DataGridContext.js';
-  import type { CustomFilters, DataGridPage, DataGridQuery, DataGridResult } from '$lib/types/DataGridPage.js';
+  import type {
+    CustomFilters,
+    DataGridPage,
+    DataGridQuery,
+    DataGridResult,
+  } from '$lib/types/DataGridPage.js';
   import type { DataGridColumn } from '$lib/types/DataGridColumn.js';
   import type { DataGridSource } from '$lib/types/DataGridSource.js';
   import { onDestroy, onMount, setContext } from 'svelte';
@@ -23,12 +28,12 @@
   /** The number of items to show on a page. Defaults to 10. */
   export let items: number = 10;
 
-  /** 
+  /**
    * Note: These only work if `source` is a function.
-   * 
+   *
    * (Optional) You can define custom filters. These are represented as
    * key-value pairs, and are passed to the `source` function as-is.
-   * 
+   *
    * An example of how you could use these would be when you have a list of
    * books from a library, and you want to have a filter the shows only the
    * books that are available to lend. You could define a checkbox that, when
@@ -93,7 +98,7 @@
 
   // When the page changes, update the data
   const unsubscribePageInfo = query.subscribe(() => {
-      update();
+    update();
   });
 
   /* ===== Functions ======================================================== */
@@ -106,14 +111,14 @@
 
       page = await getPage(
         source,
-        $query.page ?? 1,
-        $query.items ?? items,
+        $query.page,
+        $query.items,
         $query.search,
         $query.sort?.column,
         sortKey,
         $query.sort?.direction,
         $query.filters,
-        params
+        params,
       );
 
       resultInfo.update(ri => {

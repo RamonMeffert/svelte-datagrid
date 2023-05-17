@@ -1,8 +1,22 @@
-type DataGridSource<TRow> = (
-  page: number,
-  items: number,
-  search?: string,
-  sortColumn?: symbol,
-  sortKey?: keyof TRow,
-  order?: SortDirection
-) => Promise<DataGridPage<TRow> | null>
+export type DataGridSource<TRow> =
+  | ((params: DataGridSourceParameters<TRow>) 
+      => Promise<DataGridPage<TRow> | null>)
+  | TRow[];
+
+// Parameters for the remote data function
+export type DataGridSourceParameters<TRow> = {
+  /** The current page number. */
+  page: number;
+  /** The number of items per page. */
+  items: number;
+  /** A search query. */
+  search?: string;
+  /** The sort key. */
+  sort?: keyof TRow;
+  /** The sort order. */
+  order?: SortDirection;
+  /** Any extra filters. Will be converted to query parameters as-is. */
+  filters?: CustomFilters;
+  /** Any extra parameters required by the `source`. */
+  params?: { [param: string]: string };
+};

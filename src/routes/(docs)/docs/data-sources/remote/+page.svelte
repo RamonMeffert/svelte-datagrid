@@ -7,6 +7,7 @@
   import booksDataGridSource from './booksDataGridSource.txt?raw';
   import booksUrl1 from './booksUrl1.txt?raw';
   import booksUrl2 from './booksUrl2.txt?raw';
+  import paginationOption from './paginationOption.txt?raw';
 </script>
 
 <Heading level="h1" content="Remote data" />
@@ -99,17 +100,24 @@
 
 <Highlight language={typescript} code={booksUrl1} />
 
-<Heading level="h4" content="Pagination" />
+<Heading level="h4" content="Query parameters" />
 
 <p>
-  We'll look at adding pagination support next. Our library doesn't explicitly use pages, so we'll
-  need to translate our <code>page</code> and
-  <code>items</code> variables to the format they expect. They want to know how many items from the
-  result set to skip, which we can easily calculate using the page number and the number of items on
-  a page. The <code>limit</code>
-  query parameter works the same as our <code>item</code> parameter, so we can use it directly.
-  Then, we'll add the necesary query parameters to the
-  <code>URL</code> object.
+  We'll look at adding query parameters to the URL next.
+  <code>svelte-datagrid</code> provides a handy <code>buildFetchUrl</code>
+  method that should be able to deal with most configurations.
 </p>
 
 <Highlight language={typescript} code={booksUrl2} />
+
+<p>
+  By default, this method is configured to work with a page number based pagination system. However,
+  our example uses a skip-based system, where we supply number of items in the data set to skip.
+</p>
+
+<p>
+  We can configure the function to use the skip system by passing the <code>options</code>
+  parameter with <code>pagination</code> set to <code>'skip'</code>:
+</p>
+
+<Highlight language={typescript} code={paginationOption} />

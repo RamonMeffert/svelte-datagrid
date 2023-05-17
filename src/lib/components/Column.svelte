@@ -38,6 +38,10 @@
   /** Whether this column can be sorted by clicking the header. */
   export let sortable: boolean = true;
 
+  /** (Optional) If the class field does not match the database column, you can specify the
+   * sort key manually.  */
+  export let sortKey: string | undefined = undefined;
+
   // Retrieve type constructor and column store from context
   const { type, columns } = getContext<DataGridContext<TRow>>(key);
 
@@ -47,7 +51,7 @@
       // Create a unique identifier
       const id = Symbol();
       // Find the key string based on the `value` selector
-      const key = getKey();
+      const key = sortKey as keyof TRow ?? getKey();
 
       // If no header is set, use the key as the header
       if (header === '') {

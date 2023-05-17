@@ -1,7 +1,8 @@
-import type { CustomFilters, DataGridPage, SortDirection } from '$lib/types/DataGridPage.js';
+import type { DataGridPage } from '$lib/types/DataGridPage.js';
 import type { DataGridSource } from '$lib/types/DataGridSource.js';
 import { page as pageStore } from '$app/stores';
 import { get } from 'svelte/store';
+import { buildFetchUrl, type FetchUrlOptions } from '$lib/util/searchParams.js';
 
 export class Product {
   product_name!: string;
@@ -14,41 +15,20 @@ export class Product {
   manufacturer!: string;
 }
 
-export const getData: DataGridSource<Product> = async (
-  page: number,
-  items: number,
-  search?: string,
-  sortKey?: keyof Product,
-  order: SortDirection = 'asc',
-  filters?: CustomFilters,
-) => {
+export const getData: DataGridSource<Product> = async (p) => {
   const url: URL = new URL(get(pageStore).url.origin);
   url.pathname = '/api/products';
 
-  if (page > 1) {
-    url.searchParams.set('skip', ((page - 1) * items).toString());
-  }
-  
-  if (items > 5) {
-    url.searchParams.set('limit', items.toString());
-  }
+  const fetchUrlOptions: FetchUrlOptions<Product> = { 
+    defaultNumberOfItems: 15,
+    searchParamNames: { search: 'q' },
+    pagination: 'skip'
+  };
 
-  if (sortKey) {
-    url.searchParams.set('sort', sortKey);
-    url.searchParams.set('order', order);
-  }
+  const fetchUrl = buildFetchUrl(url, p, fetchUrlOptions);
 
-  if (search) {
-    url.searchParams.set('q', search);
-  }
-
-  if (filters) {
-    for(const key in filters) {
-      url.searchParams.set(key, filters[key].toString());
-    }
-  }
-
-  const response = await fetch(url);
+  // change skip and limit because they work differently
+  const response = await fetch(fetchUrl);
 
   if (response.ok) {
     const responseData = await response.json();
