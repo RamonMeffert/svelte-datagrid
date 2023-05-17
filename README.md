@@ -1,7 +1,8 @@
 # Svelte Datagrid
 
 > **Warning**  
-> This library is a work-in-progress. It is not available on NPM.
+> This library is a work-in-progress. The API is not finalized, and the
+> documentation is far from complete.
 
 An experimental type-safe datagrid library aiming to improve developer
 experience over existing libraries while maintaining great performance and
