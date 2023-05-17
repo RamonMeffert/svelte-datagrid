@@ -244,9 +244,7 @@
   - `paginator` - Location for a paginator.
  -->
 
-<svelte:head>
-  {@html `<style>${style}</style>`}
-</svelte:head>
+{@html `<style>${style}</style>`}
 
 <slot name="search" />
 
