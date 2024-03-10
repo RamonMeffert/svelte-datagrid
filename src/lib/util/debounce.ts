@@ -10,7 +10,7 @@ import type { ActionReturn } from 'svelte/action';
 export function debounce<F extends () => void>(
   _node: HTMLElement,
   params: { value: any; func: F; delay: number },
-): ActionReturn {
+): ActionReturn<any> {
   let timeout: ReturnType<typeof setTimeout>;
 
   return {
