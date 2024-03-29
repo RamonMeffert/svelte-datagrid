@@ -1,5 +1,6 @@
-import { redirect, type ServerLoad } from '@sveltejs/kit';
+import { redirect } from '@sveltejs/kit';
+import type { PageServerLoad } from './$types.js';
 
-export const load = (() => {
-  redirect(302, '/docs/getting-started/introduction');
-}) satisfies ServerLoad;
+export const load: PageServerLoad = async () => {
+    redirect(307, '/docs/getting-started/introduction');
+};
